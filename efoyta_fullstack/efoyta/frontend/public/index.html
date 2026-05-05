@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>efoyta — Hotel Digital Platform</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0d0d;--ink2:#3a3a3a;--ink3:#6b6b6b;--ink4:#9a9a9a;
+  --paper:#f5f3ef;--paper2:#ece9e2;--paper3:#ddd9d0;
+  --gold:#8b7355;--gold2:#c4a882;--gold-light:rgba(139,115,85,0.08);
+  --red:#c0392b;--green:#1a6b3c;--blue:#1a3a6b;
+  --ff:'Cormorant Garamond',serif;--fs:'DM Sans',sans-serif;
+  --r:4px;--r2:8px;--r3:12px;
+  --sh:0 2px 20px rgba(0,0,0,0.07);--sh2:0 8px 40px rgba(0,0,0,0.12);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--fs);background:var(--paper);color:var(--ink);overflow-x:hidden}
+
+/* ─── GLOBAL NAV ─── */
+#gnav{position:fixed;top:0;left:0;right:0;z-index:900;height:54px;background:rgba(245,243,239,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--paper3);display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;gap:1rem}
+.gnav-logo{font-family:var(--ff);font-size:1.5rem;font-weight:300;letter-spacing:0.06em;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.gnav-logo span{font-style:italic;color:var(--gold)}
+.gnav-tabs{display:flex;gap:0;background:var(--paper2);border-radius:20px;padding:3px;border:1px solid var(--paper3);flex-shrink:0}
+.gtab{padding:5px 13px;border-radius:16px;font-size:11.5px;font-weight:500;cursor:pointer;color:var(--ink3);transition:all .18s;letter-spacing:0.04em;white-space:nowrap}
+.gtab.on{background:var(--ink);color:var(--paper)}
+.gnav-r{display:flex;gap:8px;align-items:center;flex-shrink:0}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:var(--r);font-family:var(--fs);font-size:12px;font-weight:500;cursor:pointer;transition:all .18s;letter-spacing:0.04em;border:none;text-decoration:none;white-space:nowrap}
+.btn-ink{background:var(--ink);color:var(--paper)} .btn-ink:hover{background:var(--ink2)}
+.btn-out{background:transparent;border:1px solid var(--paper3);color:var(--ink2)} .btn-out:hover{border-color:var(--ink);color:var(--ink)}
+.btn-gold{background:var(--gold);color:#fff} .btn-gold:hover{background:var(--gold2)}
+.btn-sm{padding:5px 12px;font-size:11px}
+.btn-lg{padding:11px 26px;font-size:13.5px}
+.btn:disabled{opacity:0.4;cursor:default}
+
+/* ─── VIEWS ─── */
+.view{display:none;padding-top:54px;min-height:100vh}
+.view.on{display:block}
+
+/* ─── LANDING ─── */
+#v-home .hero{min-height:calc(100vh - 54px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;position:relative;overflow:hidden}
+#v-home .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 45%,rgba(139,115,85,0.07) 0%,transparent 65%)}
+.hero-eye{font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;font-weight:500}
+.hero-h{font-family:var(--ff);font-size:clamp(3.2rem,8vw,6.5rem);font-weight:300;line-height:1.04;color:var(--ink);margin-bottom:1.4rem;max-width:820px;position:relative}
+.hero-h em{font-style:italic;color:var(--gold)}
+.hero-p{font-size:1.05rem;color:var(--ink3);max-width:490px;line-height:1.8;margin-bottom:2.5rem;font-weight:300}
+.hero-acts{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.hero-dec{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink4)}
+.hero-dec::after{content:'';width:1px;height:36px;background:var(--ink4);opacity:0.35}
+
+/* Sections */
+.sec{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+.sec-alt{background:var(--paper2)}
+.sec-eye{font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:0.6rem;font-weight:500}
+.sec-h{font-family:var(--ff);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;line-height:1.18;color:var(--ink);margin-bottom:0.9rem}
+.sec-h em{font-style:italic;color:var(--gold)}
+.sec-p{font-size:1rem;color:var(--ink3);line-height:1.85;max-width:540px;font-weight:300}
+
+/* Feature grid */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1px;background:var(--paper3);border:1px solid var(--paper3);margin-top:3rem;border-radius:var(--r3);overflow:hidden}
+.feat{background:var(--paper);padding:2rem;transition:background .2s}
+.feat:hover{background:var(--paper2)}
+.feat-n{font-family:var(--ff);font-size:3rem;font-weight:300;color:var(--paper3);line-height:1;margin-bottom:1rem}
+.feat-title{font-size:0.85rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink);margin-bottom:0.5rem}
+.feat-desc{font-size:0.875rem;color:var(--ink3);line-height:1.75;font-weight:300}
+
+/* Pricing */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:3rem}
+.pc{background:var(--paper);border:1px solid var(--paper3);border-radius:var(--r2);padding:2rem;position:relative}
+.pc-feat{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.pc-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:10.5px;font-weight:500;padding:3px 14px;border-radius:20px;letter-spacing:0.08em;white-space:nowrap}
+.pc-tier{font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;color:var(--ink3);margin-bottom:0.4rem}
+.pc-feat .pc-tier{color:var(--gold2)}
+.pc-amt{font-family:var(--ff);font-size:3rem;font-weight:300;line-height:1;margin-bottom:0.2rem}
+.pc-per{font-size:12px;color:var(--ink3);margin-bottom:1.5rem}
+.pc-feat .pc-per{color:rgba(245,243,239,0.5)}
+.pc-list{list-style:none;font-size:0.875rem;line-height:2.1}
+.pc-list li::before{content:'— ';color:var(--gold);font-family:var(--ff)}
+.pc-feat .pc-list{color:var(--paper2)}
+
+/* ─── EXPLORE ─── */
+#v-explore .ex-hero{background:var(--ink);color:var(--paper);padding:4rem 2rem 2.5rem;text-align:center}
+#v-explore .ex-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:300;margin-bottom:1.5rem}
+#v-explore .ex-hero h1 em{font-style:italic;color:var(--gold2)}
+.sbar{display:flex;max-width:540px;margin:0 auto;background:var(--paper);border-radius:var(--r3);overflow:hidden;box-shadow:0 6px 28px rgba(0,0,0,0.35)}
+.sbar input{flex:1;padding:13px 18px;border:none;background:transparent;font-family:var(--fs);font-size:0.9rem;outline:none;color:var(--ink)}
+.sbar button{padding:13px 22px;background:var(--gold);color:#fff;border:none;font-family:var(--fs);font-size:0.85rem;font-weight:500;cursor:pointer}
+.chips{display:flex;gap:7px;justify-content:center;margin-top:1.4rem;flex-wrap:wrap}
+.chip{padding:5px 15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:20px;font-size:11.5px;color:rgba(255,255,255,0.65);cursor:pointer;transition:all .18s;letter-spacing:0.04em}
+.chip:hover,.chip.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.hotels-wrap{padding:2.5rem 2rem;max-width:1100px;margin:0 auto}
+.hcount{font-size:11.5px;color:var(--ink3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.4rem;font-weight:500}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.hcard{background:var(--paper);border:1px solid var(--paper3);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .22s}
+.hcard:hover{box-shadow:var(--sh2);transform:translateY(-3px)}
+.hcard-img{height:175px;background:var(--paper2);position:relative;display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:4rem;font-weight:300;color:var(--paper3)}
+.hcard-stars{position:absolute;top:10px;right:10px;padding:3px 9px;border-radius:20px;background:rgba(13,13,13,0.75);color:rgba(255,215,100,1);font-size:11px}
+.hcard-body{padding:1.2rem}
+.hcard-name{font-family:var(--ff);font-size:1.2rem;font-weight:400;margin-bottom:0.2rem}
+.hcard-city{font-size:11.5px;color:var(--ink3);margin-bottom:0.6rem;letter-spacing:0.04em}
+.hcard-tag{font-size:12px;color:var(--ink3);margin-bottom:0.7rem;font-weight:300;font-style:italic;font-family:var(--ff)}
+.hcard-foot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink3)}
+.hcard-price{font-family:var(--ff);font-size:1.15rem;font-weight:400;color:var(--ink)}
+
+/* ─── HOTEL SITE ─── */
+#v-hs .hs-subnav{position:sticky;top:54px;z-index:800;background:rgba(245,243,239,0.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--paper3);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:46px}
+.hs-subnav-name{font-family:var(--ff);font-size:1.05rem;font-weight:400;letter-spacing:0.06em}
+.hs-links{display:flex;gap:22px}
+.hs-link{font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:color .18s;font-weight:500}
+.hs-link:hover,.hs-link.on{color:var(--ink)}
+.hs-page{display:none}
+.hs-page.on{display:block}
+
+.hs-hero{height:68vh;min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;background:var(--paper2);overflow:hidden;padding:2rem}
+.hs-hero-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:14rem;font-weight:300;color:rgba(0,0,0,0.04);pointer-events:none;user-select:none}
+.hs-hero h1{font-family:var(--ff);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:300;line-height:1.08;position:relative;z-index:1}
+.hs-hero p{font-size:1rem;color:var(--ink3);margin-top:0.85rem;position:relative;z-index:1;font-weight:300;max-width:380px;font-style:italic;font-family:var(--ff)}
+.hs-hero .hcta{margin-top:2rem;position:relative;z-index:1;display:flex;gap:10px}
+.hs-inner{max-width:1000px;margin:0 auto;padding:3rem 2rem}
+.hs-inner h2{font-family:var(--ff);font-size:2rem;font-weight:300;margin-bottom:0.4rem}
+.hs-inner .sub{font-size:0.875rem;color:var(--ink3);margin-bottom:2rem;font-weight:300;line-height:1.75}
+
+/* Rooms */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:15px}
+.rcard{border:1px solid var(--paper3);border-radius:var(--r2);overflow:hidden;background:var(--paper);transition:box-shadow .18s}
+.rcard:hover{box-shadow:var(--sh)}
+.rcard-img{height:155px;background:var(--paper2);display:flex;align-items:center;justify-content:center;font-size:3rem}
+.rcard-body{padding:1.2rem}
+.rcard-name{font-weight:500;font-size:0.9rem;margin-bottom:0.25rem}
+.rcard-meta{display:flex;gap:10px;font-size:11.5px;color:var(--ink3);margin-bottom:0.9rem;flex-wrap:wrap}
+.rcard-price{font-family:var(--ff);font-size:1.45rem;font-weight:300;margin-bottom:0.75rem}
+.rcard-price span{font-size:11.5px;font-family:var(--fs);color:var(--ink3)}
+
+/* Menu */
+.mcats{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1.8rem}
+.mcat{padding:5px 15px;border-radius:20px;font-size:11.5px;font-weight:500;cursor:pointer;border:1px solid var(--paper3);background:var(--paper);transition:all .18s;letter-spacing:0.04em}
+.mcat.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mitems{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px}
+.mitem{border:1px solid var(--paper3);border-radius:var(--r);padding:1rem;background:var(--paper);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.mitem-n{font-weight:500;font-size:0.875rem;margin-bottom:0.2rem}
+.mitem-d{font-size:11.5px;color:var(--ink3);line-height:1.5}
+.mitem-p{font-family:var(--ff);font-size:1.2rem;font-weight:300;color:var(--gold);white-space:nowrap}
+
+/* ─── ADMIN ─── */
+#v-admin{background:var(--paper)}
+.adm-layout{display:flex;min-height:calc(100vh - 54px)}
+.adm-side{width:210px;background:var(--ink);color:var(--paper);flex-shrink:0;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;display:flex;flex-direction:column}
+.adm-side-head{padding:1.25rem 1.4rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.09);margin-bottom:0.5rem}
+.adm-side-head h3{font-family:var(--ff);font-size:1.05rem;font-weight:300;color:var(--gold2);line-height:1.3}
+.adm-side-head p{font-size:10.5px;color:rgba(255,255,255,0.35);margin-top:3px;letter-spacing:0.06em}
+.adm-sg{font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.22);padding:1.1rem 1.4rem 0.4rem;font-weight:500}
+.si{display:flex;align-items:center;gap:9px;padding:9px 1.4rem;font-size:12.5px;color:rgba(255,255,255,0.55);cursor:pointer;transition:all .18s;border-left:2px solid transparent;letter-spacing:0.03em}
+.si:hover{color:var(--paper);background:rgba(255,255,255,0.04)}
+.si.on{color:var(--paper);border-left-color:var(--gold2);background:rgba(255,255,255,0.07)}
+.si-ico{width:15px;text-align:center;font-size:13px}
+.adm-main{flex:1;padding:2rem;overflow-y:auto;min-width:0}
+.ap{display:none}.ap.on{display:block}
+.ap-h{font-family:var(--ff);font-size:1.75rem;font-weight:300;color:var(--ink)}
+.ap-sub{font-size:0.875rem;color:var(--ink3);margin-bottom:2rem;margin-top:2px;font-weight:300}
+
+/* Stats */
+.srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin-bottom:2rem}
+.scard{background:var(--paper);border:1px solid var(--paper3);border-radius:var(--r2);padding:1.2rem}
+.scard-v{font-family:var(--ff);font-size:2rem;font-weight:300;line-height:1;margin-bottom:0.2rem}
+.scard-l{font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);font-weight:500}
+.scard-d{font-size:11.5px;margin-top:4px}
+.d-up{color:var(--green)}.d-dn{color:var(--red)}.d-n{color:var(--ink4)}
+
+/* Panel */
+.panel{background:var(--paper);border:1px solid var(--paper3);border-radius:var(--r2);padding:1.4rem;margin-bottom:1.4rem}
+.panel-h{font-weight:500;font-size:0.875rem;margin-bottom:1rem;letter-spacing:0.04em}
+
+/* Table */
+.dt{width:100%;border-collapse:collapse;font-size:12.5px}
+.dt th{text-align:left;padding:9px 11px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--paper3);font-weight:500;white-space:nowrap}
+.dt td{padding:11px 11px;border-bottom:1px solid var(--paper2);vertical-align:middle}
+.dt tr:last-child td{border-bottom:none}
+.dt tr:hover td{background:rgba(0,0,0,0.015)}
+
+/* Badges */
+.bdg{display:inline-flex;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:500;letter-spacing:0.05em}
+.bdg-g{background:rgba(26,107,60,0.1);color:var(--green)}
+.bdg-a{background:rgba(139,115,85,0.1);color:var(--gold)}
+.bdg-r{background:rgba(192,57,43,0.1);color:var(--red)}
+.bdg-n{background:var(--paper2);color:var(--ink3)}
+
+/* Forms */
+.fr{margin-bottom:0.9rem}
+.fl{display:block;font-size:11px;font-weight:500;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink2);margin-bottom:5px}
+.fi{width:100%;padding:9px 13px;border:1px solid var(--paper3);border-radius:var(--r);background:var(--paper);font-family:var(--fs);font-size:0.875rem;color:var(--ink);outline:none;transition:border .18s}
+.fi:focus{border-color:var(--ink)}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+
+/* Action buttons */
+.cbtn{padding:5px 12px;background:rgba(26,107,60,0.1);color:var(--green);border:1px solid rgba(26,107,60,0.2);border-radius:var(--r);font-size:11.5px;cursor:pointer;font-weight:500;transition:all .18s;font-family:var(--fs)}
+.cbtn:hover{background:var(--green);color:#fff}
+.rbtn{padding:5px 12px;background:rgba(192,57,43,0.1);color:var(--red);border:1px solid rgba(192,57,43,0.2);border-radius:var(--r);font-size:11.5px;cursor:pointer;font-weight:500;transition:all .18s;font-family:var(--fs)}
+.rbtn:hover{background:var(--red);color:#fff}
+
+/* ─── SUPER ADMIN ─── */
+#v-sa .sa-wrap{padding:3rem 2rem;max-width:1200px;margin:0 auto}
+.sa-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.sa-hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:15px;margin-top:1.5rem}
+.sahc{background:var(--paper);border:1px solid var(--paper3);border-radius:var(--r2);padding:1.4rem}
+.sahc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.6rem}
+.sahc-name{font-family:var(--ff);font-size:1.1rem;font-weight:400}
+.sahc-meta{font-size:11.5px;color:var(--ink3);margin-bottom:1rem}
+.sahc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:0.9rem}
+.sa-s{text-align:center;background:var(--paper2);border-radius:var(--r);padding:7px 5px}
+.sa-sn{font-family:var(--ff);font-size:1.2rem;font-weight:300}
+.sa-sl{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.07em;margin-top:1px}
+.sub-st{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;padding:3px 9px;border-radius:20px}
+.ss-a{background:rgba(26,107,60,0.1);color:var(--green)}
+.ss-e{background:rgba(192,57,43,0.1);color:var(--red)}
+.ss-t{background:rgba(139,115,85,0.1);color:var(--gold)}
+
+/* ─── ARCHITECTURE ─── */
+#v-arch .arch-wrap{padding:3rem 2rem;max-width:1100px;margin:0 auto}
+.arch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:11px;margin-bottom:2.5rem}
+.arch-c{border:1px solid var(--paper3);border-radius:var(--r2);padding:1.2rem;background:var(--paper)}
+.arch-ct{font-size:0.85rem;font-weight:500;margin-bottom:0.45rem;letter-spacing:0.04em;display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.d-ink{background:var(--ink)}.d-gold{background:var(--gold)}.d-g{background:var(--green)}.d-r{background:var(--red)}
+.arch-cb{font-size:11.5px;color:var(--ink3);line-height:1.75}
+.arch-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:0.6rem}
+.arch-tag{padding:2px 7px;background:var(--paper2);border-radius:3px;font-size:10px;letter-spacing:0.06em;color:var(--ink3);font-weight:500}
+.sch-wrap{border:1px solid var(--paper3);border-radius:var(--r2);overflow:hidden;margin-bottom:14px}
+.sch-name{padding:9px 15px;background:var(--ink);color:var(--paper);font-size:10.5px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase}
+.sch-t{width:100%;border-collapse:collapse;font-size:11.5px}
+.sch-t th{text-align:left;padding:8px 11px;background:var(--paper2);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);font-weight:500;border-bottom:1px solid var(--paper3)}
+.sch-t td{padding:6.5px 11px;border-bottom:1px solid var(--paper2)}
+.sch-t tr:last-child td{border-bottom:none}
+.sch-t td:first-child{font-weight:500;font-family:'Courier New',monospace;font-size:11px;color:var(--ink)}
+.sch-t td:nth-child(2){color:var(--gold);font-size:10.5px}
+.sch-t td:nth-child(3){color:var(--ink3);font-size:10.5px}
+
+/* ─── MODAL ─── */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.52);z-index:9000;align-items:center;justify-content:center;padding:1rem}
+.mbg.on{display:flex}
+.modal{background:var(--paper);border-radius:var(--r2);padding:2rem;width:90%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.3)}
+.modal-h{font-family:var(--ff);font-size:1.5rem;font-weight:300;margin-bottom:1.4rem;display:flex;align-items:center;justify-content:space-between}
+.mclose{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--ink3);padding:0;line-height:1}
+
+/* ─── SUB BANNER ─── */
+#sub-banner{background:linear-gradient(90deg,#8b7355,#a08060);color:#fff;padding:11px 2rem;display:none;align-items:center;justify-content:center;gap:14px;font-size:13px}
+
+/* ─── TOAST ─── */
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:var(--r2);font-size:13px;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:320px;box-shadow:var(--sh2);pointer-events:none}
+
+/* Footer */
+footer{background:var(--ink);color:rgba(255,255,255,0.4);text-align:center;padding:2rem;font-size:11.5px;letter-spacing:0.07em}
+footer a{color:var(--gold2);text-decoration:none}
+
+@media(max-width:720px){
+  .gnav-tabs{display:none}
+  .adm-layout{flex-direction:column}
+  .adm-side{width:100%;height:auto;position:relative;flex-direction:row;flex-wrap:wrap;padding:0.5rem;gap:0}
+  .si{padding:7px 10px;border-left:none;font-size:11.5px}
+  .si.on{border-left:none;border-bottom:2px solid var(--gold2)}
+  .adm-sg,.adm-side-head{display:none}
+  .fr2{grid-template-columns:1fr}
+  .hs-links{gap:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ GLOBAL NAV ════ -->
+<nav id="gnav">
+  <div class="gnav-logo" onclick="gv('v-home')">e<span>foyta</span></div>
+  <div class="gnav-tabs">
+    <div class="gtab on" onclick="gv('v-home');gt(this)">Platform</div>
+    <div class="gtab" onclick="gv('v-explore');gt(this)">Explore</div>
+    <div class="gtab" onclick="gv('v-hs');gt(this)">Hotel Site</div>
+    <div class="gtab" onclick="gv('v-admin');gt(this)">Admin</div>
+    <div class="gtab" onclick="gv('v-sa');gt(this)">Super Admin</div>
+    <div class="gtab" onclick="gv('v-arch');gt(this)">Architecture</div>
+  </div>
+  <div class="gnav-r">
+    <button id="nav-login-btn" class="btn btn-out btn-sm" onclick="openLoginModal()">Sign In</button>
+    <button id="nav-logout-btn" class="btn btn-out btn-sm" onclick="doLogout()" style="display:none">Sign Out</button>
+    <button class="btn btn-ink btn-sm" onclick="gv('v-explore');gt(document.querySelectorAll('.gtab')[1])">Explore Hotels</button>
+  </div>
+</nav>
+
+<!-- ════ LANDING ════ -->
+<div id="v-home" class="view on">
+  <section class="hero">
+    <div class="hero-eye">Hotel SaaS Platform · Ethiopia & Beyond</div>
+    <h1 class="hero-h">Your hotel,<br><em>beautifully digital</em></h1>
+    <p class="hero-p">Complete digital presence for hotels — website, booking, digital menu, and guest discovery. Live in minutes, not months.</p>
+    <div class="hero-acts">
+      <button class="btn btn-ink btn-lg" onclick="gv('v-explore');gt(document.querySelectorAll('.gtab')[1])">Browse Hotels</button>
+      <button class="btn btn-gold btn-lg" onclick="gv('v-admin');gt(document.querySelectorAll('.gtab')[3])">Admin Demo</button>
+      <button class="btn btn-out btn-lg" onclick="gv('v-arch');gt(document.querySelectorAll('.gtab')[5])">Architecture</button>
+    </div>
+    <div class="hero-dec">Scroll</div>
+  </section>
+
+  <div class="sec">
+    <div class="sec-eye">What you get</div>
+    <h2 class="sec-h">Everything a hotel needs,<br><em>nothing it doesn't</em></h2>
+    <p class="sec-p">One platform. Instant website. Real-time booking. Digital menus — managed from a single elegant dashboard.</p>
+    <div class="feat-grid">
+      <div class="feat"><div class="feat-n">01</div><div class="feat-title">Instant Website</div><div class="feat-desc">Auto-generated multi-page site with home, about, rooms, menu and contact — unique to your hotel, live immediately.</div></div>
+      <div class="feat"><div class="feat-n">02</div><div class="feat-title">Booking Engine</div><div class="feat-desc">Guests browse rooms, check availability and submit requests. Confirm or decline from your dashboard.</div></div>
+      <div class="feat"><div class="feat-n">03</div><div class="feat-title">Digital Menu</div><div class="feat-desc">Manage food and drink offerings by category. All updates appear instantly on your public site.</div></div>
+      <div class="feat"><div class="feat-n">04</div><div class="feat-title">Guest Discovery</div><div class="feat-desc">Listed on efoyta.com by city — guests searching Jimma, Addis Ababa or Hawassa find your hotel first.</div></div>
+      <div class="feat"><div class="feat-n">05</div><div class="feat-title">Multi-Tenant Security</div><div class="feat-desc">Complete data isolation per hotel. No cross-tenant access. Role-based access controls for all staff.</div></div>
+      <div class="feat"><div class="feat-n">06</div><div class="feat-title">SEO Ready</div><div class="feat-desc">Clean URLs, meta titles, city pages, schema.org markup — discoverable from search engines on day one.</div></div>
+    </div>
+  </div>
+
+  <div class="sec-alt" style="padding:0">
+    <div class="sec" style="max-width:1100px">
+      <div class="sec-eye">Pricing</div>
+      <h2 class="sec-h">Simple, <em>transparent</em> plans</h2>
+      <p class="sec-p">Monthly subscription managed by the platform admin. Cancel any time.</p>
+      <div class="price-grid">
+        <div class="pc">
+          <div class="pc-tier">Starter</div>
+          <div class="pc-amt">2,500</div>
+          <div class="pc-per">ETB / month</div>
+          <ul class="pc-list"><li>1 Hotel website</li><li>Up to 10 rooms</li><li>Booking requests</li><li>Digital menu</li><li>City listing</li></ul>
+          <button class="btn btn-out" style="width:100%;justify-content:center;margin-top:1.5rem" onclick="gv('v-sa')">Get Started</button>
+        </div>
+        <div class="pc pc-feat">
+          <div class="pc-badge">Most Popular</div>
+          <div class="pc-tier">Professional</div>
+          <div class="pc-amt" style="color:var(--gold2)">6,500</div>
+          <div class="pc-per">ETB / month</div>
+          <ul class="pc-list"><li>Unlimited rooms</li><li>Priority listing</li><li>Analytics</li><li>Multi-staff accounts</li><li>Custom domain</li></ul>
+          <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:1.5rem" onclick="gv('v-sa')">Get Started</button>
+        </div>
+        <div class="pc">
+          <div class="pc-tier">Enterprise</div>
+          <div class="pc-amt">Custom</div>
+          <div class="pc-per">per agreement</div>
+          <ul class="pc-list"><li>Multi-property</li><li>White-label option</li><li>API access</li><li>Dedicated support</li><li>SLA guarantee</li></ul>
+          <button class="btn btn-out" style="width:100%;justify-content:center;margin-top:1.5rem">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>© 2025 efoyta.com — Hotel SaaS Platform &nbsp;·&nbsp; Jimma, Ethiopia &nbsp;·&nbsp; <a href="#">hello@efoyta.com</a></footer>
+</div>
+
+<!-- ════ EXPLORE ════ -->
+<div id="v-explore" class="view">
+  <div class="ex-hero">
+    <h1>Discover <em>Ethiopian Hotels</em></h1>
+    <div class="sbar">
+      <input id="si" type="text" placeholder="Search city, hotel name…" oninput="fh()">
+      <button onclick="fh()">Search</button>
+    </div>
+    <div class="chips">
+      <div class="chip on" onclick="fc('all',this)">All Cities</div>
+      <div class="chip" onclick="fc('Jimma',this)">Jimma</div>
+      <div class="chip" onclick="fc('Addis Ababa',this)">Addis Ababa</div>
+      <div class="chip" onclick="fc('Hawassa',this)">Hawassa</div>
+      <div class="chip" onclick="fc('Bahir Dar',this)">Bahir Dar</div>
+      <div class="chip" onclick="fc('Dire Dawa',this)">Dire Dawa</div>
+    </div>
+  </div>
+  <div class="hotels-wrap">
+    <div class="hcount" id="hcount">Loading…</div>
+    <div class="hgrid" id="hgrid"></div>
+  </div>
+</div>
+
+<!-- ════ HOTEL SITE ════ -->
+<div id="v-hs" class="view">
+  <nav class="hs-subnav">
+    <div class="hs-subnav-name" id="hs-name">Kaffa Grand Hotel</div>
+    <div class="hs-links">
+      <span class="hs-link on" onclick="hsp('hs-home',this)">Home</span>
+      <span class="hs-link" onclick="hsp('hs-about',this)">About</span>
+      <span class="hs-link" onclick="hsp('hs-rooms',this)">Rooms</span>
+      <span class="hs-link" onclick="hsp('hs-menu',this)">Menu</span>
+      <span class="hs-link" onclick="hsp('hs-contact',this)">Contact</span>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div class="hs-page on" id="hs-home">
+    <div class="hs-hero">
+      <div class="hs-hero-bg" id="hs-bg">☕</div>
+      <h1 id="hs-h1">Kaffa Grand Hotel</h1>
+      <p id="hs-tag">Where highland hospitality meets modern comfort</p>
+      <div class="hcta">
+        <button class="btn btn-ink" onclick="hsp('hs-rooms',document.querySelectorAll('.hs-link')[2])">View Rooms</button>
+        <button class="btn btn-out" onclick="hsp('hs-contact',document.querySelectorAll('.hs-link')[4])">Contact</button>
+      </div>
+    </div>
+    <div class="hs-inner">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start">
+        <div>
+          <div class="sec-eye">About</div>
+          <h2 style="font-family:var(--ff);font-size:1.75rem;font-weight:300;margin-bottom:0.7rem" id="hs-about-preview">Experience the birthplace of coffee</h2>
+          <p style="font-size:0.9rem;color:var(--ink3);line-height:1.8;font-weight:300" id="hs-about-short">Nestled in the heart of Jimma, we offer guests an unforgettable blend of traditional Ethiopian hospitality and contemporary amenities.</p>
+          <button class="btn btn-out" style="margin-top:1rem" onclick="hsp('hs-about',document.querySelectorAll('.hs-link')[1])">Our Story →</button>
+        </div>
+        <div>
+          <div class="sec-eye">Featured Rooms</div>
+          <div id="hs-feat-rooms"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="hs-page" id="hs-about">
+    <div class="hs-inner">
+      <div class="sec-eye">Our Story</div>
+      <h2 style="font-family:var(--ff);font-size:2.5rem;font-weight:300;line-height:1.15;margin-bottom:1.5rem">A Place of <em>Warmth</em><br>& Heritage</h2>
+      <p style="font-size:1rem;color:var(--ink2);line-height:1.95;max-width:700px;font-weight:300" id="hs-about-body">Kaffa Grand Hotel stands as a testament to the rich cultural heritage of southwestern Ethiopia. Founded in 2010, we have welcomed guests from across Ethiopia and beyond with genuine warmth and impeccable service. Our hotel takes its name from the Kaffa region — the legendary birthplace of coffee — and we carry that legacy in every detail, from the aroma of freshly brewed Jimma coffee in our lobby to the traditional décor adorning our halls. Each carefully appointed room combines modern comfort with subtle nods to local craftsmanship. Our culinary team crafts dishes celebrating the diverse flavours of Ethiopian cuisine, ensuring every meal is a journey in itself.</p>
+    </div>
+  </div>
+
+  <!-- ROOMS -->
+  <div class="hs-page" id="hs-rooms">
+    <div class="hs-inner">
+      <div class="sec-eye">Accommodation</div>
+      <h2>Our Rooms</h2>
+      <p class="sub" id="hs-rooms-sub">Select a room to book your stay.</p>
+      <div class="rgrid" id="hs-rgrid"></div>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="hs-page" id="hs-menu">
+    <div class="hs-inner">
+      <div class="sec-eye">Dining</div>
+      <h2>Restaurant & Bar</h2>
+      <p class="sub">Fresh, seasonal, locally sourced.</p>
+      <div class="mcats" id="hs-mcats"></div>
+      <div class="mitems" id="hs-mitems"></div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="hs-page" id="hs-contact">
+    <div class="hs-inner">
+      <div class="sec-eye">Get in Touch</div>
+      <h2>Contact Us</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem">
+        <div>
+          <div style="margin-bottom:1.4rem"><div style="font-size:10.5px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.3rem;font-weight:500">Phone</div><div id="hs-phone">+251 47 112 0000</div></div>
+          <div style="margin-bottom:1.4rem"><div style="font-size:10.5px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.3rem;font-weight:500">Email</div><div id="hs-email">info@kaffagrand.et</div></div>
+          <div style="margin-bottom:1.4rem"><div style="font-size:10.5px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.3rem;font-weight:500">Address</div><div id="hs-addr">Jimma Town, Oromia Region, Ethiopia</div></div>
+        </div>
+        <div style="background:var(--paper2);border-radius:var(--r2);height:200px;display:flex;align-items:center;justify-content:center;border:1px solid var(--paper3)">
+          <div style="text-align:center;color:var(--ink3);font-size:13px">
+            <div style="font-size:2rem;margin-bottom:0.5rem">📍</div>
+            <div id="hs-city-disp">Jimma, Ethiopia</div>
+            <div style="font-size:10.5px;margin-top:4px;opacity:0.55">Leaflet.js map in production</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ HOTEL ADMIN ════ -->
+<div id="v-admin" class="view">
+  <div id="sub-banner">
+    <strong>⚠ Subscription expiring in 5 days.</strong> Renew to keep your listing active.
+    <button class="btn btn-ink btn-sm" onclick="this.closest('#sub-banner').style.display='none'">Renew Now</button>
+  </div>
+  <div class="adm-layout">
+    <aside class="adm-side">
+      <div class="adm-side-head">
+        <h3 id="adm-hotel-name">Kaffa Grand Hotel</h3>
+        <p>Hotel Admin · Professional</p>
+      </div>
+      <div class="adm-sg">Overview</div>
+      <div class="si on" onclick="ap('adm-dash',this)"><span class="si-ico">◈</span>Dashboard</div>
+      <div class="adm-sg">Management</div>
+      <div class="si" onclick="ap('adm-rooms',this)"><span class="si-ico">⊞</span>Rooms</div>
+      <div class="si" onclick="ap('adm-bk',this)"><span class="si-ico">◻</span>Bookings</div>
+      <div class="si" onclick="ap('adm-menu',this)"><span class="si-ico">◈</span>Menu</div>
+      <div class="adm-sg">Hotel</div>
+      <div class="si" onclick="ap('adm-info',this)"><span class="si-ico">⚙</span>Hotel Info</div>
+      <div class="si" onclick="ap('adm-sub',this)"><span class="si-ico">◇</span>Subscription</div>
+      <div class="adm-sg">Account</div>
+      <div class="si" onclick="gv('v-hs');gt(document.querySelectorAll('.gtab')[2])"><span class="si-ico">↗</span>View Public Site</div>
+      <div class="si" onclick="gv('v-home');gt(document.querySelectorAll('.gtab')[0])"><span class="si-ico">←</span>Exit Admin</div>
+    </aside>
+    <main class="adm-main">
+
+      <!-- DASHBOARD -->
+      <div class="ap on" id="adm-dash">
+        <div class="ap-h">Dashboard</div>
+        <div class="ap-sub">Welcome back · Kaffa Grand Hotel</div>
+        <div class="srow">
+          <div class="scard"><div class="scard-v" id="st-rooms">12</div><div class="scard-l">Rooms</div><div class="scard-d d-up">↑ 2 added</div></div>
+          <div class="scard"><div class="scard-v">47</div><div class="scard-l">Bookings MTD</div><div class="scard-d d-up">↑ 18% MoM</div></div>
+          <div class="scard"><div class="scard-v" id="st-pend">8</div><div class="scard-l">Pending</div><div class="scard-d d-dn">Needs attention</div></div>
+          <div class="scard"><div class="scard-v" id="st-menu">8</div><div class="scard-l">Menu Items</div><div class="scard-d d-n">4 categories</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h">Recent Bookings</div>
+          <table class="dt" id="dash-bk-t"></table>
+        </div>
+        <div class="panel">
+          <div class="panel-h">Quick Actions</div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap">
+            <button class="btn btn-ink btn-sm" onclick="openRM()">+ Add Room</button>
+            <button class="btn btn-out btn-sm" onclick="ap('adm-bk',document.querySelectorAll('.si')[3])">All Bookings</button>
+            <button class="btn btn-out btn-sm" onclick="ap('adm-menu',document.querySelectorAll('.si')[4])">Edit Menu</button>
+            <button class="btn btn-gold btn-sm" onclick="gv('v-hs');gt(document.querySelectorAll('.gtab')[2])">Public Site ↗</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROOMS ADMIN -->
+      <div class="ap" id="adm-rooms">
+        <div class="ap-h">Rooms</div>
+        <div class="ap-sub">Manage your accommodation offerings</div>
+        <div style="margin-bottom:1.2rem"><button class="btn btn-ink btn-sm" onclick="openRM()">+ Add Room</button></div>
+        <div class="panel"><table class="dt" id="rooms-t"></table></div>
+      </div>
+
+      <!-- BOOKINGS ADMIN -->
+      <div class="ap" id="adm-bk">
+        <div class="ap-h">Bookings</div>
+        <div class="ap-sub">Manage guest reservation requests</div>
+        <div style="display:flex;gap:6px;margin-bottom:1.2rem">
+          <button class="btn btn-out btn-sm" onclick="fbk('all',this)" id="fbAll">All</button>
+          <button class="btn btn-out btn-sm" onclick="fbk('pending',this)">Pending</button>
+          <button class="btn btn-out btn-sm" onclick="fbk('confirmed',this)">Confirmed</button>
+          <button class="btn btn-out btn-sm" onclick="fbk('rejected',this)">Rejected</button>
+        </div>
+        <div class="panel"><table class="dt" id="bk-t"></table></div>
+      </div>
+
+      <!-- MENU ADMIN -->
+      <div class="ap" id="adm-menu">
+        <div class="ap-h">Digital Menu</div>
+        <div class="ap-sub">Changes appear instantly on your public site</div>
+        <div style="margin-bottom:1.2rem"><button class="btn btn-ink btn-sm" onclick="openMM()">+ Add Item</button></div>
+        <div class="panel"><table class="dt" id="menu-t"></table></div>
+      </div>
+
+      <!-- HOTEL INFO -->
+      <div class="ap" id="adm-info">
+        <div class="ap-h">Hotel Information</div>
+        <div class="ap-sub">Displayed on your public website</div>
+        <div class="panel">
+          <div class="fr"><label class="fl">Hotel Name</label><input class="fi" id="si-name" value="Kaffa Grand Hotel"></div>
+          <div class="fr"><label class="fl">Tagline</label><input class="fi" id="si-tag" value="Where highland hospitality meets modern comfort"></div>
+          <div class="fr"><label class="fl">About (Short)</label><textarea class="fi" rows="2" id="si-as">Nestled in the heart of Jimma, we offer guests an unforgettable blend of traditional Ethiopian hospitality and contemporary amenities.</textarea></div>
+          <div class="fr"><label class="fl">Full Description</label><textarea class="fi" rows="4" id="si-al">Kaffa Grand Hotel stands as a testament to the rich cultural heritage of southwestern Ethiopia. Founded in 2010, we have welcomed guests from across Ethiopia and beyond with genuine warmth.</textarea></div>
+          <div class="fr fr2">
+            <div><label class="fl">Phone</label><input class="fi" id="si-ph" value="+251 47 112 0000"></div>
+            <div><label class="fl">Email</label><input class="fi" id="si-em" value="info@kaffagrand.et"></div>
+          </div>
+          <div class="fr"><label class="fl">Address</label><input class="fi" id="si-ad" value="Jimma Town, Oromia Region, Ethiopia"></div>
+          <div class="fr"><label class="fl">City</label>
+            <select class="fi" id="si-cy"><option>Jimma</option><option>Addis Ababa</option><option>Hawassa</option><option>Bahir Dar</option><option>Dire Dawa</option></select>
+          </div>
+          <button class="btn btn-ink" onclick="saveInfo()">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- SUBSCRIPTION -->
+      <div class="ap" id="adm-sub">
+        <div class="ap-h">Subscription</div>
+        <div class="ap-sub">Manage your efoyta plan</div>
+        <div class="panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem">
+            <div><div style="font-weight:500;margin-bottom:3px">Professional Plan</div><div style="font-size:13px;color:var(--ink3)">6,500 ETB / month</div></div>
+            <span class="sub-st ss-a">● Active</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:1.4rem">
+            <div style="background:var(--paper2);padding:1rem;border-radius:var(--r);text-align:center"><div style="font-family:var(--ff);font-size:1.5rem;font-weight:300">May 31</div><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px">Next Renewal</div></div>
+            <div style="background:var(--paper2);padding:1rem;border-radius:var(--r);text-align:center"><div style="font-family:var(--ff);font-size:1.5rem;font-weight:300">27</div><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px">Days Left</div></div>
+            <div style="background:var(--paper2);padding:1rem;border-radius:var(--r);text-align:center"><div style="font-family:var(--ff);font-size:1.5rem;font-weight:300">6</div><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px">Months Active</div></div>
+          </div>
+          <p style="font-size:13px;color:var(--ink3);margin-bottom:1rem">Includes: unlimited rooms, priority listing, multi-staff accounts, analytics, custom domain.</p>
+          <div style="display:flex;gap:8px"><button class="btn btn-ink">Renew Now</button><button class="btn btn-out">Upgrade</button></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ════ SUPER ADMIN ════ -->
+<div id="v-sa" class="view">
+  <div class="sa-wrap">
+    <div class="sa-top">
+      <div><div class="sec-eye">Platform Administration</div><h1 style="font-family:var(--ff);font-size:2rem;font-weight:300">Platform Overview</h1></div>
+      <button class="btn btn-ink" onclick="openCH()">+ Create Hotel</button>
+    </div>
+    <div class="srow">
+      <div class="scard"><div class="scard-v" id="sa-total">8</div><div class="scard-l">Hotels</div><div class="scard-d d-up">↑ 2 this month</div></div>
+      <div class="scard"><div class="scard-v">284</div><div class="scard-l">Total Bookings</div><div class="scard-d d-up">↑ 34% MoM</div></div>
+      <div class="scard"><div class="scard-v" id="sa-active">6</div><div class="scard-l">Active Subs</div><div class="scard-d d-n">2 trial/pending</div></div>
+      <div class="scard"><div class="scard-v">52k</div><div class="scard-l">ETB MRR</div><div class="scard-d d-up">↑ 12%</div></div>
+    </div>
+    <h2 style="font-family:var(--ff);font-size:1.4rem;font-weight:300;margin-bottom:0">All Hotels</h2>
+    <div class="sa-hgrid" id="sa-hgrid"></div>
+  </div>
+</div>
+
+<!-- ════ ARCHITECTURE ════ -->
+<div id="v-arch" class="view">
+  <div class="arch-wrap">
+    <div class="sec-eye">Technical Blueprint</div>
+    <h1 style="font-family:var(--ff);font-size:2.5rem;font-weight:300;margin-bottom:2.5rem">System <em style="color:var(--gold)">Architecture</em></h1>
+
+    <h2 style="font-family:var(--ff);font-size:1.4rem;font-weight:300;margin-bottom:1.2rem;color:var(--ink)">Stack & Infrastructure</h2>
+    <div class="arch-grid">
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-ink"></span>Frontend</div><div class="arch-cb">React 18 + TypeScript. TanStack Router for file-based routing. TanStack Query for server state. Tailwind CSS. Vite build tool.</div><div class="arch-tags"><span class="arch-tag">React 18</span><span class="arch-tag">TypeScript</span><span class="arch-tag">Tailwind</span><span class="arch-tag">Vite</span></div></div>
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-gold"></span>Backend</div><div class="arch-cb">Node.js + Fastify REST API. JWT authentication with hotel_id claim. Tenant middleware isolates data per slug on every request.</div><div class="arch-tags"><span class="arch-tag">Node.js</span><span class="arch-tag">Fastify</span><span class="arch-tag">JWT</span><span class="arch-tag">Zod</span></div></div>
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-g"></span>Database</div><div class="arch-cb">PostgreSQL with Row-Level Security (RLS). hotel_id column enforces tenant isolation at DB level. Drizzle ORM for type-safe queries.</div><div class="arch-tags"><span class="arch-tag">PostgreSQL</span><span class="arch-tag">RLS</span><span class="arch-tag">Drizzle ORM</span></div></div>
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-r"></span>Infrastructure</div><div class="arch-cb">Docker containers. Nginx reverse proxy with SSL termination. Cloudflare CDN + WAF. S3 object storage for hotel images.</div><div class="arch-tags"><span class="arch-tag">Docker</span><span class="arch-tag">Nginx</span><span class="arch-tag">Cloudflare</span><span class="arch-tag">S3</span></div></div>
+    </div>
+
+    <h2 style="font-family:var(--ff);font-size:1.4rem;font-weight:300;margin-bottom:1.2rem">Database Schema</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-bottom:2.5rem">
+      <div class="sch-wrap"><div class="sch-name">hotels</div><table class="sch-t"><thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>id</td><td>uuid</td><td>PK</td></tr><tr><td>slug</td><td>varchar</td><td>Unique, URL-safe</td></tr><tr><td>name</td><td>varchar</td><td></td></tr><tr><td>city</td><td>varchar</td><td>Indexed</td></tr><tr><td>about / tagline</td><td>text</td><td></td></tr><tr><td>phone / email</td><td>varchar</td><td></td></tr><tr><td>address</td><td>text</td><td></td></tr><tr><td>subscription_status</td><td>enum</td><td>active/expired/trial</td></tr><tr><td>subscription_ends_at</td><td>timestamptz</td><td>Checked on login</td></tr><tr><td>created_at</td><td>timestamptz</td><td>Auto</td></tr></tbody></table></div>
+      <div class="sch-wrap"><div class="sch-name">rooms</div><table class="sch-t"><thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>id</td><td>uuid</td><td>PK</td></tr><tr><td>hotel_id</td><td>uuid</td><td>FK → hotels · Tenant key</td></tr><tr><td>name</td><td>varchar</td><td></td></tr><tr><td>type</td><td>varchar</td><td>Single/Double/Suite</td></tr><tr><td>capacity</td><td>int</td><td></td></tr><tr><td>price_per_night</td><td>numeric</td><td>ETB</td></tr><tr><td>available</td><td>boolean</td><td>Default true</td></tr><tr><td>description</td><td>text</td><td></td></tr><tr><td>image_url</td><td>varchar</td><td>S3 key</td></tr></tbody></table></div>
+      <div class="sch-wrap"><div class="sch-name">bookings</div><table class="sch-t"><thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>id</td><td>uuid</td><td>PK</td></tr><tr><td>hotel_id</td><td>uuid</td><td>FK · Tenant isolation key</td></tr><tr><td>room_id</td><td>uuid</td><td>FK → rooms</td></tr><tr><td>guest_name</td><td>varchar</td><td></td></tr><tr><td>guest_email</td><td>varchar</td><td></td></tr><tr><td>guest_phone</td><td>varchar</td><td></td></tr><tr><td>check_in / check_out</td><td>date</td><td></td></tr><tr><td>status</td><td>enum</td><td>pending/confirmed/rejected</td></tr><tr><td>created_at</td><td>timestamptz</td><td></td></tr></tbody></table></div>
+      <div class="sch-wrap"><div class="sch-name">menu_items</div><table class="sch-t"><thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>id</td><td>uuid</td><td>PK</td></tr><tr><td>hotel_id</td><td>uuid</td><td>FK · Tenant key</td></tr><tr><td>name</td><td>varchar</td><td></td></tr><tr><td>category</td><td>varchar</td><td>Indexed</td></tr><tr><td>description</td><td>text</td><td></td></tr><tr><td>price</td><td>numeric</td><td>ETB</td></tr><tr><td>available</td><td>boolean</td><td>Default true</td></tr></tbody></table></div>
+      <div class="sch-wrap"><div class="sch-name">users</div><table class="sch-t"><thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>id</td><td>uuid</td><td>PK</td></tr><tr><td>hotel_id</td><td>uuid</td><td>null = super admin</td></tr><tr><td>email</td><td>varchar</td><td>Unique</td></tr><tr><td>password_hash</td><td>varchar</td><td>bcrypt rounds=12</td></tr><tr><td>role</td><td>enum</td><td>super_admin/hotel_admin/staff</td></tr><tr><td>created_at</td><td>timestamptz</td><td></td></tr></tbody></table></div>
+    </div>
+
+    <h2 style="font-family:var(--ff);font-size:1.4rem;font-weight:300;margin-bottom:1.2rem">URL Structure & SEO</h2>
+    <div class="arch-grid" style="margin-bottom:2.5rem">
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-ink"></span>Public Routes</div><div class="arch-cb">/ — Platform home<br>/hotels/[city] — City listing page<br>/hotel/[slug] — Hotel home<br>/hotel/[slug]/rooms<br>/hotel/[slug]/menu<br>/hotel/[slug]/about<br>/hotel/[slug]/contact</div></div>
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-gold"></span>Admin Routes</div><div class="arch-cb">/login — Sign in<br>/admin → redirects to hotel dashboard<br>/admin/[slug]/* — Hotel admin pages<br>/superadmin/* — Platform admin<br>JWT stored in HttpOnly cookie</div></div>
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-g"></span>REST API</div><div class="arch-cb">GET /api/hotels?city=Jimma<br>GET /api/hotel/:slug<br>GET /api/hotel/:slug/rooms<br>POST /api/hotel/:slug/bookings<br>PATCH /api/admin/bookings/:id<br>All admin routes require JWT</div></div>
+      <div class="arch-c"><div class="arch-ct"><span class="dot d-r"></span>SEO Strategy</div><div class="arch-cb">City pages with proper H1 + meta.<br>Schema.org/Hotel JSON-LD per hotel.<br>Open Graph image + title per hotel.<br>Auto-generated /sitemap.xml.<br>Canonical URLs to prevent duplicates.<br>SSR/SSG for crawlable HTML.</div></div>
+    </div>
+
+    <h2 style="font-family:var(--ff);font-size:1.4rem;font-weight:300;margin-bottom:1.2rem">Security Model</h2>
+    <div class="arch-c" style="max-width:720px">
+      <div class="arch-cb" style="line-height:2.1">
+        <strong>Layer 1 — JWT</strong>: Every auth token carries hotel_id. Middleware verifies this claim on every admin API request before touching the DB.<br>
+        <strong>Layer 2 — PostgreSQL RLS</strong>: Row-Level Security policies on all tenant tables ensure even direct DB queries can only access rows where hotel_id matches the session context. Defense in depth.<br>
+        <strong>Layer 3 — Role Enum</strong>: super_admin bypasses hotel_id check (with separate secret). hotel_admin has full CRUD on own hotel. staff role is read-only.<br>
+        <strong>Layer 4 — Rate Limiting</strong>: Fastify rate-limit plugin on booking and auth endpoints. Cloudflare DDoS protection at edge.<br>
+        <strong>Subscription Gate</strong>: Middleware checks subscription_status on every hotel_admin request. Expired = 402 response. Public-facing routes (hotel website, explore) remain accessible with a renewal banner shown.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODALS ════ -->
+<!-- Booking -->
+<div class="mbg" id="m-book">
+  <div class="modal">
+    <div class="modal-h">Book a Room <button class="mclose" onclick="cm('m-book')">✕</button></div>
+    <div style="font-size:12.5px;color:var(--ink3);margin-bottom:1.4rem" id="bk-room-label">Deluxe Room — 1,200 ETB/night</div>
+    <div class="fr"><label class="fl">Your Name</label><input class="fi" id="bk-n" placeholder="Full name"></div>
+    <div class="fr"><label class="fl">Email</label><input class="fi" type="email" id="bk-e" placeholder="your@email.com"></div>
+    <div class="fr"><label class="fl">Phone</label><input class="fi" id="bk-p" placeholder="+251 …"></div>
+    <div class="fr fr2">
+      <div><label class="fl">Check-In</label><input class="fi" type="date" id="bk-ci" onchange="calcT()"></div>
+      <div><label class="fl">Check-Out</label><input class="fi" type="date" id="bk-co" onchange="calcT()"></div>
+    </div>
+    <div id="bk-total" style="background:var(--paper2);border-radius:var(--r);padding:9px 13px;font-size:12.5px;margin-bottom:1rem;display:none"></div>
+    <button class="btn btn-ink" style="width:100%;justify-content:center;padding:11px" onclick="submitBk()">Submit Booking Request</button>
+    <div style="font-size:10.5px;color:var(--ink4);text-align:center;margin-top:0.65rem">Hotel will confirm within 24 hours</div>
+  </div>
+</div>
+
+<!-- Add Room -->
+<div class="mbg" id="m-room">
+  <div class="modal">
+    <div class="modal-h">Add Room <button class="mclose" onclick="cm('m-room')">✕</button></div>
+    <div class="fr"><label class="fl">Room Name</label><input class="fi" id="nr-n" placeholder="e.g. Deluxe Double"></div>
+    <div class="fr fr2">
+      <div><label class="fl">Type</label><select class="fi" id="nr-t"><option>Single</option><option>Double</option><option>Suite</option><option>Family</option></select></div>
+      <div><label class="fl">Capacity</label><input class="fi" type="number" id="nr-c" placeholder="2"></div>
+    </div>
+    <div class="fr"><label class="fl">Price / Night (ETB)</label><input class="fi" type="number" id="nr-p" placeholder="1200"></div>
+    <div class="fr"><label class="fl">Description</label><textarea class="fi" rows="2" id="nr-d" placeholder="Brief description…"></textarea></div>
+    <button class="btn btn-ink" style="width:100%;justify-content:center;padding:11px" onclick="addRoom()">Add Room</button>
+  </div>
+</div>
+
+<!-- Add Menu Item -->
+<div class="mbg" id="m-menu">
+  <div class="modal">
+    <div class="modal-h">Add Menu Item <button class="mclose" onclick="cm('m-menu')">✕</button></div>
+    <div class="fr"><label class="fl">Item Name</label><input class="fi" id="nm-n" placeholder="e.g. Injera with Tibs"></div>
+    <div class="fr fr2">
+      <div><label class="fl">Category</label><select class="fi" id="nm-c"><option>Main Dishes</option><option>Starters</option><option>Beverages</option><option>Desserts</option></select></div>
+      <div><label class="fl">Price (ETB)</label><input class="fi" type="number" id="nm-p" placeholder="150"></div>
+    </div>
+    <div class="fr"><label class="fl">Description</label><input class="fi" id="nm-d" placeholder="Brief description"></div>
+    <button class="btn btn-ink" style="width:100%;justify-content:center;padding:11px" onclick="addMI()">Add Item</button>
+  </div>
+</div>
+
+<!-- Create Hotel -->
+<div class="mbg" id="m-ch">
+  <div class="modal">
+    <div class="modal-h">Create Hotel <button class="mclose" onclick="cm('m-ch')">✕</button></div>
+    <div class="fr"><label class="fl">Hotel Name</label><input class="fi" id="ch-n" placeholder="e.g. Hawassa Lakeside Hotel"></div>
+    <div class="fr"><label class="fl">City</label><select class="fi" id="ch-c"><option>Jimma</option><option>Addis Ababa</option><option>Hawassa</option><option>Bahir Dar</option><option>Dire Dawa</option></select></div>
+    <div class="fr"><label class="fl">Admin Email</label><input class="fi" type="email" id="ch-e" placeholder="admin@hotel.et"></div>
+    <div class="fr"><label class="fl">Plan</label><select class="fi" id="ch-pl"><option>Starter</option><option>Professional</option><option>Enterprise</option></select></div>
+    <button class="btn btn-ink" style="width:100%;justify-content:center;padding:11px" onclick="createH()">Create Hotel & Send Invite</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Login Modal -->
+<div class="mbg" id="m-login">
+  <div class="modal">
+    <div class="modal-h">Sign In <button class="mclose" onclick="cm('m-login')">✕</button></div>
+    <div style="font-size:12px;color:var(--ink3);margin-bottom:1.2rem;padding:10px;background:var(--paper2);border-radius:var(--r)">
+      <strong>Demo credentials:</strong><br>
+      Super Admin: admin@efoyta.com / admin123<br>
+      Hotel Admin: kaffa@efoyta.com / hotel123
+    </div>
+    <div class="fr"><label class="fl">Email</label><input class="fi" type="email" id="l-email" placeholder="your@email.com"></div>
+    <div class="fr"><label class="fl">Password</label><input class="fi" type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div id="l-err" style="color:var(--red);font-size:12px;margin-bottom:0.75rem;min-height:16px"></div>
+    <button id="l-btn" class="btn btn-ink" style="width:100%;justify-content:center;padding:11px" onclick="doLogin()">Sign In</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  efoyta.com — Frontend  (API-connected)
+// ════════════════════════════════════════════════════════
+
+const API = '';  // same origin
+
+// ── Auth state ──
+let AUTH = { token: localStorage.getItem('efoyta_token'), user: JSON.parse(localStorage.getItem('efoyta_user') || 'null') };
+
+// ── Current state ──
+let curCity = 'all';
+let bkFilter = 'all';
+let curHotelSlug = 'kaffa-grand';
+let curBookingRoomId = null;
+let curBookingRoomPrice = 0;
+
+// ── API helper ──
+async function api(path, opts = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (AUTH.token) headers['Authorization'] = 'Bearer ' + AUTH.token;
+  try {
+    const res = await fetch(API + path, { ...opts, headers: { ...headers, ...(opts.headers || {}) } });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Request failed');
+    return data;
+  } catch (e) {
+    throw e;
+  }
+}
+
+// ════ NAV ════
+function gv(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0, 0);
+  if (id === 'v-explore') loadHotels();
+  if (id === 'v-hs') loadHotelSite(curHotelSlug);
+  if (id === 'v-admin') {
+    if (!AUTH.token) { openLoginModal(); return; }
+    loadAdminDash();
+  }
+  if (id === 'v-sa') {
+    if (!AUTH.token || AUTH.user?.role !== 'super_admin') { openLoginModal(); return; }
+    loadSuperAdmin();
+  }
+}
+function gt(el) {
+  document.querySelectorAll('.gtab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+}
+document.querySelectorAll('.gtab').forEach(t => t.addEventListener('click', () => gt(t)));
+
+// ════ AUTH ════
+function openLoginModal() {
+  document.getElementById('m-login').classList.add('on');
+}
+
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  const btn = document.getElementById('l-btn');
+  const err = document.getElementById('l-err');
+  err.textContent = '';
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  try {
+    const data = await api('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password: pass })
+    });
+    AUTH.token = data.token;
+    AUTH.user = data.user;
+    localStorage.setItem('efoyta_token', data.token);
+    localStorage.setItem('efoyta_user', JSON.stringify(data.user));
+    cm('m-login');
+    toast(`Welcome back, ${data.user.name || data.user.email}!`);
+    updateNavForAuth();
+    if (data.user.role === 'super_admin') {
+      gv('v-sa'); gt(document.querySelectorAll('.gtab')[4]);
+    } else {
+      gv('v-admin'); gt(document.querySelectorAll('.gtab')[3]);
+    }
+  } catch (e) {
+    err.textContent = e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+}
+
+function doLogout() {
+  AUTH = { token: null, user: null };
+  localStorage.removeItem('efoyta_token');
+  localStorage.removeItem('efoyta_user');
+  updateNavForAuth();
+  gv('v-home'); gt(document.querySelectorAll('.gtab')[0]);
+  toast('Signed out');
+}
+
+function updateNavForAuth() {
+  const loginBtn = document.getElementById('nav-login-btn');
+  const logoutBtn = document.getElementById('nav-logout-btn');
+  if (AUTH.token) {
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = '';
+    logoutBtn.textContent = AUTH.user?.name || 'Sign Out';
+  } else {
+    loginBtn.style.display = '';
+    logoutBtn.style.display = 'none';
+  }
+}
+
+// ════ EXPLORE ════
+async function loadHotels() {
+  const q = (document.getElementById('si') || { value: '' }).value.trim();
+  const countEl = document.getElementById('hcount');
+  const gridEl = document.getElementById('hgrid');
+  countEl.textContent = 'Loading…';
+  gridEl.innerHTML = '<div style="padding:2rem;color:var(--ink3)">Loading hotels…</div>';
+  try {
+    const params = new URLSearchParams();
+    if (curCity !== 'all') params.set('city', curCity);
+    if (q) params.set('q', q);
+    const hotels = await api('/api/hotels?' + params);
+    countEl.textContent = `${hotels.length} hotel${hotels.length !== 1 ? 's' : ''} found${curCity !== 'all' ? ' in ' + curCity : ''}`;
+    gridEl.innerHTML = hotels.length === 0
+      ? '<div style="padding:2rem;color:var(--ink3)">No hotels found.</div>'
+      : hotels.map(h => `
+        <div class="hcard" onclick="openHS('${h.slug}')">
+          <div class="hcard-img">${h.emoji}<div class="hcard-stars">${h.stars}</div></div>
+          <div class="hcard-body">
+            <div class="hcard-name">${h.name}</div>
+            <div class="hcard-city">📍 ${h.city}</div>
+            <div class="hcard-tag">${h.tagline}</div>
+            <div class="hcard-foot"><span>📍 ${h.city}</span><div class="hcard-price">from ${h.price_from.toLocaleString()} <span style="font-size:11px;font-family:var(--fs);color:var(--ink3)">ETB</span></div></div>
+          </div>
+        </div>`).join('');
+  } catch (e) {
+    countEl.textContent = 'Error loading hotels';
+    gridEl.innerHTML = '<div style="padding:2rem;color:var(--red)">'+e.message+'</div>';
+  }
+}
+function fh() { loadHotels(); }
+function fc(c, el) {
+  curCity = c;
+  document.querySelectorAll('.chip').forEach(x => x.classList.remove('on'));
+  el.classList.add('on');
+  loadHotels();
+}
+function openHS(slug) {
+  curHotelSlug = slug;
+  gv('v-hs');
+  gt(document.querySelectorAll('.gtab')[2]);
+}
+
+// ════ HOTEL SITE ════
+async function loadHotelSite(slug) {
+  try {
+    const [hotel, rooms, menu] = await Promise.all([
+      api('/api/hotels/' + slug),
+      api('/api/hotels/' + slug + '/rooms'),
+      api('/api/hotels/' + slug + '/menu')
+    ]);
+    renderHotelSite(hotel, rooms, menu);
+  } catch (e) {
+    document.getElementById('hs-h1').textContent = 'Hotel not found';
+    toast('Could not load hotel: ' + e.message);
+  }
+}
+
+function renderHotelSite(h, rooms, menu) {
+  document.getElementById('hs-name').textContent = h.name;
+  document.getElementById('hs-h1').textContent = h.name;
+  document.getElementById('hs-tag').textContent = h.tagline;
+  document.getElementById('hs-bg').textContent = h.emoji;
+  document.getElementById('hs-about-preview').textContent = 'Experience ' + h.city;
+  document.getElementById('hs-about-short').textContent = h.about.slice(0, 160) + (h.about.length > 160 ? '…' : '');
+  document.getElementById('hs-about-body').textContent = h.about;
+  document.getElementById('hs-phone').textContent = h.phone || 'N/A';
+  document.getElementById('hs-email').textContent = h.email || 'N/A';
+  document.getElementById('hs-addr').textContent = h.address || h.city + ', Ethiopia';
+  document.getElementById('hs-city-disp').textContent = h.city + ', Ethiopia';
+
+  const avail = rooms.filter(r => r.available);
+  document.getElementById('hs-rooms-sub').textContent = `${avail.length} room${avail.length !== 1 ? 's' : ''} available`;
+
+  document.getElementById('hs-rgrid').innerHTML = rooms.map(r => `
+    <div class="rcard">
+      <div class="rcard-img">${r.type === 'Suite' ? '🛋️' : r.type === 'Family' ? '👨‍👩‍👧' : '🛏️'}</div>
+      <div class="rcard-body">
+        <div class="rcard-name">${r.name}</div>
+        <div class="rcard-meta">
+          <span>👤 ${r.capacity}</span><span>${r.type}</span>
+          <span class="bdg ${r.available ? 'bdg-g' : 'bdg-r'}">${r.available ? 'Available' : 'Occupied'}</span>
+        </div>
+        <div class="rcard-price">${r.price_per_night.toLocaleString()} ETB <span>/ night</span></div>
+        <button class="btn btn-ink" style="width:100%;justify-content:center" ${!r.available ? 'disabled' : ''}
+          onclick="openBK('${r.id}','${r.name}',${r.price_per_night},'${h.slug}')">Book Now</button>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('hs-feat-rooms').innerHTML = rooms.slice(0, 2).map(r => `
+    <div style="border:1px solid var(--paper3);border-radius:var(--r);padding:0.85rem;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:0.875rem;font-weight:500">${r.name}</div>
+      <div style="font-size:11.5px;color:var(--ink3)">${r.type} · ${r.capacity} guest${r.capacity > 1 ? 's' : ''}</div></div>
+      <div style="font-family:var(--ff);font-size:1.1rem">${r.price_per_night.toLocaleString()}<span style="font-size:11px;font-family:var(--fs);color:var(--ink3)"> ETB</span></div>
+    </div>`).join('');
+
+  renderMenuItems(menu);
+  hsp('hs-home', document.querySelector('.hs-link'));
+}
+
+let _currentMenu = [];
+function renderMenuItems(items, cat) {
+  if (items) _currentMenu = items;
+  const cats = [...new Set(_currentMenu.map(i => i.category))];
+  const ac = cat || cats[0];
+  document.getElementById('hs-mcats').innerHTML = cats.map(c =>
+    `<div class="mcat ${c === ac ? 'on' : ''}" onclick="renderMenuItems(null,'${c}')">${c}</div>`
+  ).join('');
+  document.getElementById('hs-mitems').innerHTML = _currentMenu
+    .filter(i => i.category === ac)
+    .map(i => `
+      <div class="mitem">
+        <div><div class="mitem-n">${i.name}</div><div class="mitem-d">${i.description}</div></div>
+        <div class="mitem-p">${i.price}</div>
+      </div>`).join('');
+}
+
+function hsp(id, el) {
+  document.querySelectorAll('.hs-page').forEach(p => p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.hs-link').forEach(l => l.classList.remove('on'));
+  if (el) el.classList.add('on');
+}
+
+// ════ BOOKING MODAL ════
+function openBK(rid, rname, price, slug) {
+  curBookingRoomId = rid;
+  curBookingRoomPrice = price;
+  curHotelSlug = slug;
+  document.getElementById('bk-room-label').textContent = `${rname} — ${price.toLocaleString()} ETB / night`;
+  document.getElementById('m-book').classList.add('on');
+  const t = new Date().toISOString().split('T')[0];
+  const n = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+  document.getElementById('bk-ci').value = t;
+  document.getElementById('bk-co').value = n;
+  calcT();
+}
+function calcT() {
+  const ci = document.getElementById('bk-ci').value;
+  const co = document.getElementById('bk-co').value;
+  if (ci && co) {
+    const nights = Math.max(1, Math.round((new Date(co) - new Date(ci)) / 86400000));
+    const el = document.getElementById('bk-total');
+    el.style.display = 'block';
+    el.textContent = `${nights} night${nights !== 1 ? 's' : ''} × ${curBookingRoomPrice.toLocaleString()} ETB = ${(nights * curBookingRoomPrice).toLocaleString()} ETB total`;
+  }
+}
+async function submitBk() {
+  const name = document.getElementById('bk-n').value.trim();
+  if (!name) { document.getElementById('bk-n').focus(); return; }
+  const ci = document.getElementById('bk-ci').value;
+  const co = document.getElementById('bk-co').value;
+  const btn = document.querySelector('#m-book .btn-ink');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  try {
+    await api(`/api/hotels/${curHotelSlug}/bookings`, {
+      method: 'POST',
+      body: JSON.stringify({
+        room_id: curBookingRoomId,
+        guest_name: name,
+        guest_email: document.getElementById('bk-e').value,
+        guest_phone: document.getElementById('bk-p').value,
+        check_in: ci, check_out: co
+      })
+    });
+    cm('m-book');
+    toast('Booking request submitted! Hotel will confirm within 24 hours.');
+  } catch (e) {
+    toast('Booking failed: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Submit Booking Request';
+  }
+}
+
+// ════ ADMIN DASHBOARD ════
+async function loadAdminDash() {
+  try {
+    const dash = await api('/api/admin/dashboard');
+    document.getElementById('st-rooms').textContent = dash.rooms;
+    document.getElementById('st-pend').textContent = dash.pending;
+    document.getElementById('st-menu').textContent = dash.menu_items;
+    const hotel = await api('/api/admin/hotel');
+    document.getElementById('adm-hotel-name').textContent = hotel.name;
+    // Populate info form
+    document.getElementById('si-name').value = hotel.name;
+    document.getElementById('si-tag').value = hotel.tagline || '';
+    document.getElementById('si-as').value = hotel.about ? hotel.about.slice(0, 200) : '';
+    document.getElementById('si-al').value = hotel.about || '';
+    document.getElementById('si-ph').value = hotel.phone || '';
+    document.getElementById('si-em').value = hotel.email || '';
+    document.getElementById('si-ad').value = hotel.address || '';
+    document.getElementById('si-cy').value = hotel.city || 'Jimma';
+    // Subscription banner
+    if (hotel.subscription_status === 'trial') {
+      document.getElementById('sub-banner').style.display = 'flex';
+    }
+    // Recent bookings table
+    document.getElementById('dash-bk-t').innerHTML =
+      `<thead><tr><th>Guest</th><th>Room</th><th>Dates</th><th>Status</th><th>Total</th></tr></thead>
+       <tbody>${(dash.recent_bookings || []).map(b => `
+        <tr>
+          <td><strong>${b.guest_name}</strong></td>
+          <td>${b.room_name || '—'}</td>
+          <td>${b.check_in} → ${b.check_out}</td>
+          <td><span class="bdg ${b.status === 'confirmed' ? 'bdg-g' : b.status === 'pending' ? 'bdg-a' : 'bdg-r'}">${b.status}</span></td>
+          <td>${b.total_price.toLocaleString()} ETB</td>
+        </tr>`).join('')}</tbody>`;
+    loadAdminRooms();
+    loadAdminBookings();
+    loadAdminMenu();
+  } catch (e) {
+    if (e.message.includes('401') || e.message.includes('auth')) {
+      doLogout(); openLoginModal();
+    }
+    toast('Error: ' + e.message);
+  }
+}
+
+function ap(id, el) {
+  document.querySelectorAll('.ap').forEach(p => p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.si').forEach(s => s.classList.remove('on'));
+  if (el) el.classList.add('on');
+  // Reload data when switching panels
+  if (id === 'adm-rooms') loadAdminRooms();
+  if (id === 'adm-bk') loadAdminBookings();
+  if (id === 'adm-menu') loadAdminMenu();
+}
+
+// ── Rooms ──
+async function loadAdminRooms() {
+  try {
+    const rooms = await api('/api/admin/rooms');
+    document.getElementById('rooms-t').innerHTML =
+      `<thead><tr><th>Room</th><th>Type</th><th>Cap.</th><th>Price/Night</th><th>Status</th><th>Actions</th></tr></thead>
+       <tbody>${rooms.map(r => `
+        <tr>
+          <td><strong>${r.name}</strong><br><span style="font-size:10.5px;color:var(--ink3)">${r.description}</span></td>
+          <td>${r.type}</td><td>${r.capacity}</td>
+          <td>${r.price_per_night.toLocaleString()} ETB</td>
+          <td><span class="bdg ${r.available ? 'bdg-g' : 'bdg-r'}">${r.available ? 'Available' : 'Occupied'}</span></td>
+          <td style="white-space:nowrap">
+            <button class="btn btn-out btn-sm" onclick="togR('${r.id}',${r.available})">${r.available ? 'Mark Occupied' : 'Mark Free'}</button>
+            <button class="rbtn" onclick="delR('${r.id}')">Del</button>
+          </td>
+        </tr>`).join('')}</tbody>`;
+  } catch (e) { toast('Error loading rooms: ' + e.message); }
+}
+
+async function togR(id, currentAvail) {
+  try {
+    await api('/api/admin/rooms/' + id, {
+      method: 'PATCH',
+      body: JSON.stringify({ available: currentAvail ? 0 : 1 })
+    });
+    loadAdminRooms();
+    toast('Room status updated');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+async function delR(id) {
+  if (!confirm('Delete this room?')) return;
+  try {
+    await api('/api/admin/rooms/' + id, { method: 'DELETE' });
+    loadAdminRooms();
+    loadAdminDash();
+    toast('Room deleted');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+function openRM() { document.getElementById('m-room').classList.add('on'); }
+
+async function addRoom() {
+  const name = document.getElementById('nr-n').value.trim();
+  if (!name) return;
+  try {
+    await api('/api/admin/rooms', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        type: document.getElementById('nr-t').value,
+        capacity: parseInt(document.getElementById('nr-c').value) || 2,
+        price_per_night: parseInt(document.getElementById('nr-p').value) || 1000,
+        description: document.getElementById('nr-d').value || ''
+      })
+    });
+    cm('m-room');
+    document.getElementById('nr-n').value = '';
+    loadAdminRooms();
+    toast('Room added');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+// ── Bookings ──
+async function loadAdminBookings() {
+  try {
+    const url = bkFilter === 'all' ? '/api/admin/bookings' : `/api/admin/bookings?status=${bkFilter}`;
+    const bookings = await api(url);
+    document.getElementById('bk-t').innerHTML =
+      `<thead><tr><th>Guest</th><th>Room</th><th>In</th><th>Out</th><th>Status</th><th>Total</th><th>Actions</th></tr></thead>
+       <tbody>${bookings.map(b => `
+        <tr>
+          <td><strong>${b.guest_name}</strong><br><span style="font-size:10.5px;color:var(--ink3)">${b.guest_email}</span></td>
+          <td>${b.room_name || '—'}</td>
+          <td>${b.check_in}</td><td>${b.check_out}</td>
+          <td><span class="bdg ${b.status === 'confirmed' ? 'bdg-g' : b.status === 'pending' ? 'bdg-a' : 'bdg-r'}">${b.status}</span></td>
+          <td style="white-space:nowrap">${b.total_price.toLocaleString()} ETB</td>
+          <td style="white-space:nowrap">
+            ${b.status === 'pending'
+              ? `<button class="cbtn" onclick="updBK('${b.id}','confirmed')">✓</button>
+                 <button class="rbtn" onclick="updBK('${b.id}','rejected')">✕</button>`
+              : '<span style="font-size:10.5px;color:var(--ink4)">Done</span>'}
+          </td>
+        </tr>`).join('')}</tbody>`;
+  } catch (e) { toast('Error loading bookings: ' + e.message); }
+}
+
+function fbk(f, el) {
+  bkFilter = f;
+  document.querySelectorAll('[onclick^="fbk"]').forEach(b => b.classList.remove('btn-ink'));
+  el && el.classList.add('btn-ink');
+  loadAdminBookings();
+}
+
+async function updBK(id, status) {
+  try {
+    await api('/api/admin/bookings/' + id, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+    loadAdminBookings();
+    loadAdminDash();
+    toast(`Booking ${status}`);
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+// ── Menu ──
+async function loadAdminMenu() {
+  try {
+    const items = await api('/api/admin/menu');
+    document.getElementById('menu-t').innerHTML =
+      `<thead><tr><th>Item</th><th>Category</th><th>Price</th><th>Actions</th></tr></thead>
+       <tbody>${items.map(m => `
+        <tr>
+          <td><strong>${m.name}</strong><br><span style="font-size:10.5px;color:var(--ink3)">${m.description}</span></td>
+          <td><span class="bdg bdg-n">${m.category}</span></td>
+          <td>${m.price} ETB</td>
+          <td><button class="rbtn" onclick="delMI('${m.id}')">Del</button></td>
+        </tr>`).join('')}</tbody>`;
+  } catch (e) { toast('Error loading menu: ' + e.message); }
+}
+
+function openMM() { document.getElementById('m-menu').classList.add('on'); }
+
+async function addMI() {
+  const name = document.getElementById('nm-n').value.trim();
+  if (!name) return;
+  try {
+    await api('/api/admin/menu', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        category: document.getElementById('nm-c').value,
+        description: document.getElementById('nm-d').value || '',
+        price: parseInt(document.getElementById('nm-p').value) || 0
+      })
+    });
+    cm('m-menu');
+    document.getElementById('nm-n').value = '';
+    loadAdminMenu();
+    toast('Menu item added — live on public site');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+async function delMI(id) {
+  try {
+    await api('/api/admin/menu/' + id, { method: 'DELETE' });
+    loadAdminMenu();
+    toast('Item removed');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+// ── Hotel Info ──
+async function saveInfo() {
+  try {
+    await api('/api/admin/hotel', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        name: document.getElementById('si-name').value,
+        tagline: document.getElementById('si-tag').value,
+        about: document.getElementById('si-al').value,
+        phone: document.getElementById('si-ph').value,
+        email: document.getElementById('si-em').value,
+        address: document.getElementById('si-ad').value,
+        city: document.getElementById('si-cy').value
+      })
+    });
+    document.getElementById('adm-hotel-name').textContent = document.getElementById('si-name').value;
+    toast('Hotel information saved!');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+// ════ SUPER ADMIN ════
+async function loadSuperAdmin() {
+  try {
+    const [stats, hotels] = await Promise.all([
+      api('/api/superadmin/stats'),
+      api('/api/superadmin/hotels')
+    ]);
+    document.getElementById('sa-total').textContent = stats.total_hotels;
+    document.getElementById('sa-active').textContent = stats.active;
+    document.getElementById('sa-hgrid').innerHTML = hotels.map(h => `
+      <div class="sahc">
+        <div class="sahc-top">
+          <div>
+            <div class="sahc-name">${h.emoji} ${h.name}</div>
+            <div class="sahc-meta">📍 ${h.city} · /hotel/${h.slug}</div>
+          </div>
+          <span class="sub-st ${h.subscription_status === 'active' ? 'ss-a' : h.subscription_status === 'expired' ? 'ss-e' : 'ss-t'}">
+            ${h.subscription_status === 'active' ? '● Active' : h.subscription_status === 'expired' ? '● Expired' : '◌ Trial'}
+          </span>
+        </div>
+        <div class="sahc-stats">
+          <div class="sa-s"><div class="sa-sn">${h.rooms_count || 0}</div><div class="sa-sl">Rooms</div></div>
+          <div class="sa-s"><div class="sa-sn">${h.bookings_count || 0}</div><div class="sa-sl">Bookings</div></div>
+          <div class="sa-s"><div class="sa-sn">${(h.plan || 'Free').substring(0, 4)}</div><div class="sa-sl">Plan</div></div>
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+          <span style="font-size:10.5px;color:var(--ink3)">Ends: ${h.subscription_ends || '—'}</span>
+          <div style="margin-left:auto;display:flex;gap:5px">
+            <button class="btn btn-out btn-sm" onclick="openHS('${h.slug}');gt(document.querySelectorAll('.gtab')[2])">Site</button>
+            ${h.subscription_status === 'expired'
+              ? `<button class="cbtn" onclick="renewH('${h.id}')">Renew</button>`
+              : `<button class="rbtn" onclick="cancelSub('${h.id}','${h.name}')">Cancel</button>`}
+          </div>
+        </div>
+      </div>`).join('');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+async function renewH(id) {
+  try {
+    await api('/api/superadmin/hotels/' + id + '/subscription', {
+      method: 'PATCH',
+      body: JSON.stringify({ status: 'active' })
+    });
+    loadSuperAdmin();
+    toast('Subscription renewed');
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+async function cancelSub(id, name) {
+  if (!confirm(`Cancel subscription for ${name}?`)) return;
+  try {
+    await api('/api/superadmin/hotels/' + id + '/subscription', {
+      method: 'PATCH',
+      body: JSON.stringify({ status: 'expired' })
+    });
+    loadSuperAdmin();
+    toast(`${name} subscription cancelled`);
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+function openCH() { document.getElementById('m-ch').classList.add('on'); }
+
+async function createH() {
+  const name = document.getElementById('ch-n').value.trim();
+  if (!name) return;
+  const btn = document.querySelector('#m-ch .btn-ink');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  try {
+    const result = await api('/api/superadmin/hotels', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        city: document.getElementById('ch-c').value,
+        admin_email: document.getElementById('ch-e').value,
+        plan: document.getElementById('ch-pl').value
+      })
+    });
+    cm('m-ch');
+    document.getElementById('ch-n').value = '';
+    loadSuperAdmin();
+    toast(`Hotel "${name}" created! Admin: ${result.admin_email} / ${result.temp_password}`);
+  } catch (e) { toast('Error: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = 'Create Hotel & Send Invite'; }
+}
+
+// ════ MODALS ════
+function cm(id) { document.getElementById(id).classList.remove('on'); }
+document.querySelectorAll('.mbg').forEach(m => m.addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('on');
+}));
+
+// ════ TOAST ════
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.transform = 'translateY(0)';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.transform = 'translateY(100px)'; t.style.opacity = '0'; }, 3500);
+}
+
+// ════ INIT ════
+updateNavForAuth();
+loadHotels();
+// Preload home hotel site in background
+loadHotelSite('kaffa-grand').catch(() => {});
+</script>
+</body>
+</html>
